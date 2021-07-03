@@ -1,5 +1,6 @@
 const Router = require('express').Router;
 const userController = require('../controllers/user-controller');
+const templateController = require('../controllers/templateController');
 const router = new Router();
 const { body } = require('express-validator');
 const authMiddleware = require('../middlewares/authMiddlewere');
@@ -11,6 +12,11 @@ router.post('/registration',
 );
 router.post('/login', userController.login);
 router.post('/logout', userController.logout);
+router.post('/template/create', templateController.create);
+router.get('/template/all', templateController.getTemplate);
+router.get('/template/:id', templateController.getByIdTemplate);
+router.delete('/template/delete/:id', templateController.deleteTemplate);
+router.put('/template/edit/:id', templateController.editTemplate);
 router.get('/activate/:link', userController.activate);
 router.get('/refresh', userController.refresh);
 router.get('/users', authMiddleware, userController.getUsers);
