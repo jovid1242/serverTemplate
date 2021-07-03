@@ -1,6 +1,7 @@
 const TemplateModel = require('../models/templateModel');
 
 class templateService {
+
     async createTemplate(title, text, category, price, fileName, imageName, created, language, tags) {
         const template = await TemplateModel.create({ title, text, category, price, file: fileName, img: imageName, created, language, tags })
         return {
@@ -8,13 +9,11 @@ class templateService {
         }
     }
 
-    async editTemplateById(_id, title, text, category, price, fileName, imageName, created, language, tags) {
+    async editTemplateById(id, title, text, category, price, fileName, imageName, created, language, tags) {
         const template = TemplateModel.updateOne(
-            _id,
-            {
-                title, text, category, price, file: fileName, img: imageName, created, language, tags
-            }
+            { _id: id }, { $set: { title, text, category, price, file: fileName, img: imageName, created, language, tags } }
         )
+        // findOneAndUpdate
         return template;
     }
 
