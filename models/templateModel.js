@@ -11,7 +11,10 @@ const TemplateSchema = new Schema({
         type: String, required: true
     },
     price: {
-        type: Number, required: true
+        type: String, required: true
+    },
+    build: {
+        type: String, required: true
     },
     file: {
         type: String, required: true

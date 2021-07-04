@@ -2,18 +2,32 @@ const TemplateModel = require('../models/templateModel');
 
 class templateService {
 
-    async createTemplate(title, text, category, price, fileName, imageName, created, language, tags) {
-        const template = await TemplateModel.create({ title, text, category, price, file: fileName, img: imageName, created, language, tags })
+    async createTemplate(title, text, category, price, build, fileName, imageName, created, language, tags) {
+        const template = await TemplateModel.create({ title, text, category, price, build, file: fileName, img: imageName, created, language, tags })
         return {
             template: template
         }
     }
 
-    async editTemplateById(id, title, text, category, price, fileName, imageName, created, language, tags) {
-        const template = TemplateModel.updateOne(
-            { _id: id }, { $set: { title, text, category, price, file: fileName, img: imageName, created, language, tags } }
+    async editTemplateById(title, text, category, price, build, fileName, imageName, created, language, tags, id) {
+        const template = await TemplateModel.updateOne(
+            { "_id": id },
+            {
+                $set: {
+                    "title": title,
+                    "text": text,
+                    "category": category,
+                    "price": price,
+                    "build": build,
+                    "file": fileName,
+                    "img": imageName,
+                    "created": created,
+                    "language": language,
+                    "tags": tags
+                }
+            },
+            { upsert: true }
         )
-        // findOneAndUpdate
         return template;
     }
 
@@ -30,6 +44,10 @@ class templateService {
     async getTemplateById(idTemplate) {
         const template = await TemplateModel.findById(idTemplate);
         return template;
+    }
+    async viewTemplate(idTemplate) {
+        const template = await TemplateModel.findOne({ build: idTemplate });
+        return template.build;
     }
 }
 
