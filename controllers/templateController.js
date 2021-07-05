@@ -26,12 +26,13 @@ class TemplateController {
             const buildFile = req.files.build;
             const buildType = buildFile.mimetype.split('/').splice(1, 1);
             const buildName = uuid.v4();
-            if (file.mimetype === 'application/zip') {
-                file.mv(path.join(__dirname + '/../uploads', 'builds/') + `${buildName}.${buildType}`, err => {
+            const pathBuildName = buildFile.name.split('.')[0]
+            if (buildFile.mimetype === 'application/zip') {
+                buildFile.mv(path.join(__dirname + '/../uploads', 'builds/') + `${buildName}.${buildType}`, err => {
                     if (err) {
                         throw ApiError.BadRequest('Ошибка при загрузка файла');
                     }
-                    decompress(path.join(__dirname + '/../uploads', 'builds/') + `${buildName}.${buildType}`, `dist/${buildName}`)
+                    decompress(path.join(__dirname + '/../uploads', 'builds/') + `${buildName}.${buildType}`, `public/${pathBuildName}`)
                         .then(files => {
                             console.log('done!');
                         })
@@ -43,14 +44,14 @@ class TemplateController {
             const imageFile = req.files.image
             const typeImage = imageFile.mimetype.split('/').splice(1, 1)
             const imageName = `${uuid.v4()}.${typeImage}`;
-            file.mv(path.join(__dirname + '/../uploads', 'images/') + imageName, err => {
+            imageFile.mv(path.join(__dirname + '/../uploads', 'images/') + imageName, err => {
                 if (err) {
                     throw ApiError.BadRequest('Ошибка при загрузка файла');
                 }
             })
 
             const created = new Date();
-            const templateData = await templateService.createTemplate(title, text, category, price, buildName, fileName, imageName, created, language, tags);
+            const templateData = await templateService.createTemplate(title, text, category, price, pathBuildName, fileName, imageName, created, language, tags);
             return res.json(templateData);
         } catch (e) {
             next(e);
@@ -77,12 +78,13 @@ class TemplateController {
             const buildFile = req.files.build;
             const buildType = buildFile.mimetype.split('/').splice(1, 1);
             const buildName = uuid.v4();
-            if (file.mimetype === 'application/zip') {
-                file.mv(path.join(__dirname + '/../uploads', 'builds/') + `${buildName}.${buildType}`, err => {
+            const pathBuildName = buildFile.name.split('.')[0]
+            if (buildFile.mimetype === 'application/zip') {
+                buildFile.mv(path.join(__dirname + '/../uploads', 'builds/') + `${buildName}.${buildType}`, err => {
                     if (err) {
                         throw ApiError.BadRequest('Ошибка при загрузка файла');
                     }
-                    decompress(path.join(__dirname + '/../uploads', 'builds/') + `${buildName}.${buildType}`, `dist/${buildName}`)
+                    decompress(path.join(__dirname + '/../uploads', 'builds/') + `${buildName}.${buildType}`, `public/${pathBuildName}`)
                         .then(files => {
                             console.log('done!');
                         })
@@ -94,7 +96,7 @@ class TemplateController {
             const imageFile = req.files.image
             const typeImage = imageFile.mimetype.split('/').splice(1, 1)
             const imageName = `${uuid.v4()}.${typeImage}`;
-            file.mv(path.join(__dirname + '/../uploads', 'images/') + imageName, err => {
+            imageFile.mv(path.join(__dirname + '/../uploads', 'images/') + imageName, err => {
                 if (err) {
                     throw ApiError.BadRequest('Ошибка при загрузка файла');
                 }
@@ -140,9 +142,9 @@ class TemplateController {
 
     async viewTemplate(req, res, next) {
         try {
-            const idTemplate = req.params.id;
-            const template = await templateService.viewTemplate(idTemplate);
-            res.sendFile(path.resolve(path.join(__dirname + '/../dist', `${template}/build/`), 'main.html'))
+            const pathBuild = req.params.path;
+            const template = await templateService.viewTemplate(pathBuild);
+            res.sendFile(path.join(__dirname + '/../public', `${template}/build/`, 'index.html'));
         } catch (e) {
             next(e);
         }

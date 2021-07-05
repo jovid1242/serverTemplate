@@ -4,7 +4,7 @@ const templateController = require('../controllers/templateController');
 const router = new Router();
 const { body } = require('express-validator');
 const authMiddleware = require('../middlewares/authMiddlewere');
-
+// const path = require('path')
 // post запросы
 router.post('/registration',
     body('email').isEmail(),
@@ -19,12 +19,12 @@ router.delete('/template/delete/:id', templateController.deleteTemplate);
 // put запросы
 router.put('/template/edit/:id', templateController.editTemplate);
 // get запросы
+router.get('/', (req, res) => { res.json('hello') });
 router.get('/template/all', templateController.getTemplate);
-router.get('/template/build/:id', templateController.viewTemplate);
+router.get('/template/build/:path', templateController.viewTemplate);
 router.get('/template/:id', templateController.getByIdTemplate);
 router.get('/activate/:link', userController.activate);
 router.get('/refresh', userController.refresh);
 router.get('/users', authMiddleware, userController.getUsers);
 
 module.exports = router;
-

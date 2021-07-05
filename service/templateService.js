@@ -45,8 +45,8 @@ class templateService {
         const template = await TemplateModel.findById(idTemplate);
         return template;
     }
-    async viewTemplate(idTemplate) {
-        const template = await TemplateModel.findOne({ build: idTemplate });
+    async viewTemplate(pathBuild) {
+        const template = await TemplateModel.findOne({ "build": pathBuild });
         return template.build;
     }
 }
