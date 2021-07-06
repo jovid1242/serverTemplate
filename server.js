@@ -10,8 +10,6 @@ const path = require('path')
 const PORT = process.env.PORT || 3010;
 const app = express();
 
-// const publicPath = path.join(__dirname, 'public');
-// app.use(express.static(publicPath));
 app.use(express.static(path.join(__dirname, 'public/')));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -20,7 +18,7 @@ app.use(cookieParser());
 app.use(cors());
 app.use('/api', router);
 app.use(errorMiddlewere);
-// app.use(express.static(path.join(__dirname, 'dist')))
+
 const start = async () => {
     try {
         await mongoose.connect(process.env.DB_URL, {

@@ -1,4 +1,5 @@
 const TemplateModel = require('../models/templateModel');
+const ApiError = require('../exceptions/apiError');
 
 class templateService {
 
@@ -47,6 +48,9 @@ class templateService {
     }
     async viewTemplate(pathBuild) {
         const template = await TemplateModel.findOne({ "build": pathBuild });
+        if (!template) {
+            throw ApiError.BadRequest('Ошибка: сайт не найдено', template);
+        }
         return template.build;
     }
 }
